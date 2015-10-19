@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<h1>Choose the alternative which is the nearest opposite of the given word.</h1>
+<div id="id01"></div>
+<br/>
+<div id="id02"></div>
+
+<div><button onclick="myFunction2()">Click to view new question</button></div>
+
+
+
+<script>
+function myFunction2() {
+var xmlhttp = new XMLHttpRequest();
+	document.getElementById("id02").innerHTML ="";
+ var x = Math.floor((Math.random() * 8) + 1);
+var url = "http://csmonitoring-dev.azurewebsites.net/continuity/json_quiz.php?ID="+x;
+
+xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        myFunction(xmlhttp.responseText);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(response) {
+    var arr = JSON.parse(response);
+    var i;
+    var out = "<table>";
+
+    for(i = 0; i < arr.length; i++) {
+        out += "<tr><td>" + 
+        arr[i].Question +
+        "</td></tr><tr><td> (a). " +
+        arr[i].op1 +
+        "<input type='radio' name='r1' value='"+arr[i].op1+"' onchange='myFun(" + arr[i].ID + ")'/></td></tr><tr><td> (b). " +
+        arr[i].op2 +
+         "<input type='radio' name='r1' value='"+arr[i].op2+"' onchange='myFun(" + arr[i].ID + ")'/></td></tr><tr><td> (b). " +
+        arr[i].op3 +
+         "<input type='radio' name='r1' value='"+arr[i].op3+"' onchange='myFun(" + arr[i].ID + ")'/></td></tr><tr><td> (b). " +
+        arr[i].op4 +
+         "<input type='radio' name='r1' value='"+arr[i].op4+"' onchange='myFun(" + arr[i].ID + ")'/></td></tr>";
+    }
+    out += "</table>";
+    document.getElementById("id01").innerHTML = out;
+}
+}
+</script>
+<script>
+function myFun(id2) {
+	//f.count = ++f.count || 1;
+var radios = document.getElementsByName('r1');
+var ans="";
+//document.getElementById("id02").innerHTML =id2;
+for (var i = 0, length = radios.length; i < length; i++) {
+    if (radios[i].checked) {
+        // do whatever you want with the checked radio
+        //alert(radios[i].value);
+//document.getElementById("id02").innerHTML =radios[i].value;
+ans=radios[i].value;
+        // only one radio can be logically checked, don't check the rest
+        break;
+    }
+}
+
+var xmlhttp = new XMLHttpRequest();
+
+ //var x = Math.floor((Math.random() * 2) + 1);
+var url = "http://csmonitoring-dev.azurewebsites.net/continuity/json_quiz.php?ID="+id2;
+
+xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        myFunction(xmlhttp.responseText);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(response) {
+    var arr = JSON.parse(response);
+    for(i = 0; i < arr.length; i++) {
+    	var n = arr[i].Ans.localeCompare(ans);
+    	//document.getElementById("id02").innerHTML =ans;
+   if(n==0)
+   {
+   //	count=count+1;
+   	document.getElementById("id02").innerHTML ="Your answer is correct  <img src='apply.png'/>";//[Score : "+f.count+"]";
+
+   }
+   else
+   {
+   	document.getElementById("id02").innerHTML ="Your answer is incorrect <img src='war.png'/>";
+   }
+   }
+
+
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
